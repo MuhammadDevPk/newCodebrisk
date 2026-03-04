@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>codebrisk | Advanced Web & AI Services</title>
+    <meta name="description" content="codebrisk delivers cutting-edge web development and agentic AI services for tech startups and enterprises. We build custom, premium software solutions.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#1a1a1a',
+                        accent: '#00d4ff',
+                        gold: '#f4c430',
+                        lavender: '#e8ecff',
+                        surface: 'rgba(255, 255, 255, 0.03)',
+                        surfaceHover: 'rgba(255, 255, 255, 0.08)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Clash Display', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'mesh': 'radial-gradient(at 40% 20%, hsla(190,100%,50%,0.15) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(45,90%,57%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(240,100%,80%,0.05) 0px, transparent 50%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f0f11;
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Magnetic Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00d4ff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+        }
+
+        .hover-active .cursor-dot {
+            width: 0px;
+            height: 0px;
+        }
+        
+        .hover-active .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(244, 196, 48, 0.1);
+            border-color: #f4c430;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(30, 30, 32, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(40, 40, 45, 0.5);
+        }
+
+        /* Text gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .text-gradient-accent {
+            background: linear-gradient(135deg, #00d4ff 0%, #0088ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Tech Matrix Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+        }
+        
+        .tech-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #1a1a1c, #141415);
+            box-shadow:  5px 5px 10px #0c0c0d, -5px -5px 10px #1e1e21; /* Neumorphic dark */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #666;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            color: #00d4ff;
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2), inset 1px 1px 2px rgba(255,255,255,0.1);
+        }
+
+        /* Noise overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Buttons */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            color: #fff;
+        }
+        
+        .btn-solid {
+            background: #ffffff;
+            color: #0f0f11;
+            transition: all 0.3s ease;
+        }
+        .btn-solid:hover {
+            background: #f4c430;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 196, 48, 0.3);
+        }
+
+        /* Irregular Layouts */
+        .services-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .service-card {
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .service-card:nth-child(even) {
+            transform: translateY(40px);
+        }
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.6s;
+            pointer-events: none;
+        }
+        .service-card:hover::after {
+            opacity: 1;
+        }
+        .service-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            z-index: 10;
+        }
+        .service-card:nth-child(even):hover {
+            transform: translateY(35px) scale(1.02);
+        }
+
+        /* Timeline */
+        .timeline-scroll-container {
+            display: flex;
+            gap: 4rem;
+            padding: 4rem 2vw;
+            width: 300vw;
+        }
+        .timeline-step {
+            flex: 1;
+            position: relative;
+        }
+        .timeline-line {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            top: 24px;
+            left: 48px;
+            right: -4rem;
+            z-index: -1;
+        }
+        .timeline-marker {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .timeline-step:hover .timeline-marker {
+            border-color: #00d4ff;
+            color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .services-wrapper { grid-template-columns: 1fr; }
+            .service-card:nth-child(even), .service-card:nth-child(even):hover { transform: translateY(0); }
+            body { cursor: auto; }
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+    </style>
+</head>
+<body class="antialiased bg-mesh">
+    <div class="noise"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 mix-blend-difference top-0 pt-6 px-8 md:px-16 flex justify-between items-center">
+        <div class="font-display font-bold text-2xl tracking-tighter text-white magnetic">code<span class="text-accent">brisk</span>.</div>
+        <div class="hidden md:flex gap-8 font-sans text-sm font-medium tracking-wide text-gray-300">
+            <a href="#services" class="hover:text-white transition-colors magnetic">Services</a>
+            <a href="#process" class="hover:text-white transition-colors magnetic">Process</a>
+            <a href="#work" class="hover:text-white transition-colors magnetic">Work</a>
+            <a href="#contact" class="hover:text-white transition-colors magnetic align-middle">
+                Contact <span class="inline-block w-2 h-2 rounded-full bg-accent ml-1 animate-pulse"></span>
+            </a>
+        </div>
+        <button class="md:hidden text-white">Menu</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen relative flex items-center pt-24 pb-12 px-8 md:px-16 lg:px-24">
+        <div class="grid lg:grid-cols-2 gap-16 w-full max-w-7xl mx-auto items-center">
+            <!-- Left: Hero Text -->
+            <div class="order-2 lg:order-1 hero-content">
+                <div class="inline-block mb-6 px-4 py-1.5 rounded-full border border-surfaceHover text-xs font-semibold tracking-wider text-accent uppercase">
+                    Advanced Software Studio
+                </div>
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-medium leading-[1.05] tracking-tight mb-8">
+                    <span class="text-gradient">Build Your</span><br>
+                    <span class="text-gradient">Future Stack.</span>
+                </h1>
+                <p class="font-sans text-lg md:text-xl text-gray-400 mb-10 max-w-md leading-relaxed">
+                    We engineer premium web experiences and agentic AI systems for forward-thinking enterprises. No templates. Just cutting-edge code.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#contact" class="magnetic btn-solid px-8 py-4 rounded-full font-medium text-sm tracking-wide">
+                        Start Project
+                    </a>
+                    <a href="#services" class="magnetic btn-primary px-8 py-4 rounded-full font-medium text-sm tracking-wide flex items-center gap-2">
+                        Explore Capabilities 
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Tech Matrix -->
+            <div class="order-1 lg:order-2 hero-matrix relative perspective-1000">
+                <div class="absolute inset-0 bg-accent opacity-5 blur-[100px] rounded-full"></div>
+                <div class="tech-grid p-8 glass-panel rounded-3xl transform rotate-y-[-5deg] rotate-x-[5deg]">
+                    <div class="tech-item magnetic">React</div>
+                    <div class="tech-item magnetic">Vue</div>
+                    <div class="tech-item magnetic" style="color: #f4c430;">Python</div>
+                    <div class="tech-item magnetic">Angular</div>
+                    <div class="tech-item magnetic">Next.js</div>
+                    <div class="tech-item magnetic" style="color: #00d4ff;">AI Agents</div>
+                    <div class="tech-item magnetic">Laravel</div>
+                    <div class="tech-item magnetic">PHP</div>
+                    <div class="tech-item magnetic">LangChain</div>
+                    <div class="tech-item magnetic">WebGL</div>
+                    <div class="tech-item magnetic">GSAP</div>
+                    <div class="tech-item magnetic">Django</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-32 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto">
+        <div class="mb-20">
+            <h2 class="font-display text-4xl md:text-5xl font-medium text-gradient mb-6 section-title">Capabilities.</h2>
+            <p class="text-gray-400 max-w-xl text-lg section-title">We specialize in complex, high-performance systems dressed in award-winning aesthetics.</p>
+        </div>
+
+        <div class="services-wrapper">
+            <!-- Service 1 -->
+            <div class="service-card glass-panel group">
+                <div class="text-accent mb-8">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="stroke-current stroke-2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h3 class="font-display text-2xl font-semibold mb-4 text-white">Advanced Web Engineering</h3>
+                <p class="text-gray-400 mb-8 leading-relaxed">Modern web applications built for speed, scale, and sensory impact. We utilize the precise framework your product demands.</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-accent transition-colors">React / Next.js</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-accent transition-colors">Vue / Nuxt</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-accent transition-colors">Laravel</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-accent transition-colors">Three.js</span>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card glass-panel group">
+                <div class="text-gold mb-8">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="stroke-current stroke-2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                </div>
+                <h3 class="font-display text-2xl font-semibold mb-4 text-white">Agentic AI Systems</h3>
+                <p class="text-gray-400 mb-8 leading-relaxed">Intelligent, autonomous software tailored to your workflows. We integrate state-of-the-art LLMs into tangible, working products.</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-gold transition-colors">Python</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-gold transition-colors">LangChain</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-gold transition-colors">LangGraph</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-gold transition-colors">RAG Pipelines</span>
+                </div>
+            </div>
+            
+            <!-- Service 3 -->
+            <div class="service-card glass-panel group">
+                <div class="text-lavender mb-8">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="stroke-current stroke-2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                </div>
+                <h3 class="font-display text-2xl font-semibold mb-4 text-white">Premium UI/UX Design</h3>
+                <p class="text-gray-400 mb-8 leading-relaxed">Silicon Valley-grade interfaces. We craft pixel-perfect, highly interactive designs that position your brand as a market leader.</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-lavender transition-colors">Figma</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-lavender transition-colors">Interaction Design</span>
+                    <span class="px-3 py-1 rounded-full text-xs border border-surfaceHover text-gray-300 group-hover:border-lavender transition-colors">Design Systems</span>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="service-card glass-panel group flex flex-col justify-center items-center text-center border-dashed border-gray-700 bg-transparent hover:bg-surface">
+                <h3 class="font-display text-2xl font-semibold mb-4 text-white">Need a bespoke solution?</h3>
+                <p class="text-gray-400 mb-6">Let's discuss your specific technical requirements.</p>
+                <a href="#contact" class="magnetic text-accent hover:text-white transition-colors border-b border-accent pb-1">Consult with our engineers</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Timeline -->
+    <section id="process" class="py-32 overflow-hidden bg-black relaitve">
+        <div class="px-8 md:px-16 lg:px-24 max-w-7xl mx-auto mb-16">
+            <h2 class="font-display text-4xl font-medium text-white mb-4">The Methodology.</h2>
+            <p class="text-gray-500">Precision from concept to deployment.</p>
+        </div>
+
+        <div class="overflow-x-visible relative h-80 process-container">
+            <div class="timeline-scroll-container absolute left-0">
+                <div class="timeline-step">
+                    <div class="timeline-marker magnetic">1</div>
+                    <div class="timeline-line"></div>
+                    <div class="mt-12 pr-12">
+                        <h4 class="font-display text-xl text-white mb-2">Discovery & Architecture</h4>
+                        <p class="text-gray-400 text-sm">Deep dive into requirements, system design, and selecting the optimal tech stack.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-marker magnetic">2</div>
+                    <div class="timeline-line"></div>
+                    <div class="mt-12 pr-12">
+                        <h4 class="font-display text-xl text-white mb-2">Interface Crafting</h4>
+                        <p class="text-gray-400 text-sm">Designing premium mockups, establishing design systems, and mapping interactions.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-marker magnetic">3</div>
+                    <div class="timeline-line"></div>
+                    <div class="mt-12 pr-12">
+                        <h4 class="font-display text-xl text-white mb-2">Engineering & AI Integration</h4>
+                        <p class="text-gray-400 text-sm">Rigorous development using cutting-edge frameworks and integrating agentic AI models.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-marker magnetic">4</div>
+                    <div class="mt-12 pr-12">
+                        <h4 class="font-display text-xl text-white mb-2">Launch & Scale</h4>
+                        <p class="text-gray-400 text-sm">Performance optimization, deployment, and providing scalable post-launch infrastructure.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Placeholder -->
+    <section id="work" class="py-32 px-8 md:px-16 lg:px-24 mx-auto border-t border-surfaceHover">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="inline-block px-4 py-1.5 rounded-full border border-surfaceHover text-xs text-gray-400 mb-6 bg-surface">
+                Portfolio Module Initializing...
+            </div>
+            <h2 class="font-display text-4xl md:text-5xl font-medium text-gradient mb-8">Selected Works.</h2>
+            
+            <div class="h-64 md:h-96 rounded-3xl glass-panel border-dashed flex items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-tr from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                <p class="font-sans text-gray-500 tracking-widest uppercase text-sm z-10">Confidential Client Projects — Coming Soon</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / CTA -->
+    <footer id="contact" class="py-24 px-8 md:px-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-dark z-[-2]"></div>
+        <!-- Gradient orb -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[400px] bg-accent opacity-10 blur-[120px] rounded-full z-[-1]"></div>
+
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-display text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight">Ready to build?</h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Skip the generic agencies. Partner with codebrisk for custom software that defines industry standards.</p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="mailto:hello@codebrisk.com" class="magnetic btn-solid w-full sm:w-auto px-10 py-5 rounded-full font-bold text-lg tracking-wide shadow-2xl">
+                    Initiate Discussion
+                </a>
+            </div>
+            
+            <div class="mt-32 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2026 codebrisk. All rights reserved. Pakistan.</p>
+                <div class="flex gap-6 mt-4 md:mt-0 font-medium">
+                    <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+                    <a href="#" class="hover:text-white transition-colors">GitHub</a>
+                    <a href="#" class="hover:text-white transition-colors">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts for Interactions -->
+    <script>
+        // Custom Magnetic Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const magneticElements = document.querySelectorAll('.magnetic');
+        
+        // Update cursor position
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            // Fast follow for dot
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            // Smooth follow for outline via GSAP
+            gsap.to(cursorOutline, {
+                x: posX,
+                y: posY,
+                duration: 0.15,
+                ease: "power2.out"
+            });
+        });
+
+        // Magnetic hover effect
+        magneticElements.forEach((el) => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hover-active');
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hover-active');
+                gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+            });
+            
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                // Move the element slightly towards cursor
+                gsap.to(el, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // GSAP Scroll Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero items fade in
+        gsap.from(".hero-content > *", {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out",
+            delay: 0.2
+        });
+
+        gsap.from(".tech-item", {
+            scale: 0.8,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.05,
+            ease: "back.out(1.5)",
+            delay: 0.5
+        });
+
+        // Services Parallax and Reveal
+        gsap.from(".section-title", {
+            scrollTrigger: {
+                trigger: "#services",
+                start: "top 80%",
+            },
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+
+        gsap.from(".service-card", {
+            scrollTrigger: {
+                trigger: ".services-wrapper",
+                start: "top 70%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power2.out"
+        });
+
+        // Timeline horizontal scroll effect
+        if(window.innerWidth > 768) {
+            let tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".process-container",
+                    start: "top center",
+                    end: "+=100%",
+                    scrub: 1,
+                }
+            });
+            tl.to(".timeline-scroll-container", {
+                xPercent: -30,
+                ease: "none"
+            });
+        }
+    </script>
+</body>
+</html>
