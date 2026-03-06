@@ -100,15 +100,6 @@
             transform: translateY(-2px);
         }
 
-        .parallax-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-image: 
-                radial-gradient(circle at 80% 20%, rgba(0, 216, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 20% 80%, rgba(244, 199, 106, 0.02) 0%, transparent 40%);
-        }
-
         .stat-card {
             border-left: 1px solid rgba(244, 199, 106, 0.3);
             padding-left: 1.5rem;
@@ -129,8 +120,6 @@
     </style>
 </head>
 <body class="antialiased selection:bg-accent-primary selection:text-black">
-    <div class="parallax-bg" id="parallax-bg"></div>
-
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-40 bg-background-start/80 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
@@ -506,13 +495,6 @@
     <!-- Minimal Vanilla JS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const parallaxBg = document.getElementById('parallax-bg');
-            window.addEventListener('scroll', () => {
-                const scrolled = window.scrollY;
-                if(parallaxBg) {
-                    parallaxBg.style.transform = `translateY(${scrolled * 0.15}px)`;
-                }
-            });
             const navLinks = document.querySelectorAll('.nav-link');
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
             const observer = new IntersectionObserver((entries) => {
