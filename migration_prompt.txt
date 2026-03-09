@@ -1,0 +1,24 @@
+### MIGRATION PROMPT FOR OTHER AGENTS
+
+**Instructions: Copy and paste the prompt below into a new chat session to update your other pages.**
+
+---
+
+**PROMPT:**
+
+I have successfully updated my landing page (`index.html`) to a premium Light Mode "Architectural" theme. I need you to update [INSERT_FILENAME_HERE.html] to match this new aesthetic exactly.
+
+**YOUR TASK:**
+1. Read the `light_mode_migration_guide.md` and `design_system.md` files in the project root to understand the new color palette, shadow rules, and component styling.
+2. Invert the dark theme of [INSERT_FILENAME_HERE.html] to light mode following these core rules:
+   - **Background**: Change to Off-White (`#F7F7F7`).
+   - **Typography**: Change headlines to Carbon Black (`#1C1C1C`) and body text to Mid-Grey (`#666666`).
+   - **Accents**: Use Heritage Gold (`#CC9966`) for CTAs and highlights.
+   - **Cards**: Use pure White (`#FFFFFF`) with ultra-subtle shadows (`0 10px 40px rgba(0, 0, 0, 0.03)`).
+   - **Imagery**: Replace any dark-background images with high-key, light-filled visuals.
+   - **Navigation**: Apply a `12px` backdrop-blur with `white/80` background.
+3. Ensure all technical stacks (n8n, LangChain, LangGraph) and contact details (Lahore, Pakistan) are preserved and legible.
+
+Maintain the "Sleek, Architectural, Concierge White" tone throughout the conversion.
+
+---
