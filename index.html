@@ -38,8 +38,8 @@
                         'ambient-glow': 'radial-gradient(circle at top right, rgba(204, 153, 102, 0.05), transparent 40%), radial-gradient(circle at bottom left, rgba(102, 163, 204, 0.03), transparent 30%)',
                     },
                     boxShadow: {
-                        'soft': '0 15px 30px rgba(0, 0, 0, 0.05)',
-                        'soft-hover': '0 25px 50px rgba(0, 0, 0, 0.08)',
+                        'soft': '0 10px 40px rgba(0, 0, 0, 0.03)',
+                        'soft-hover': '0 20px 50px rgba(0, 0, 0, 0.06)',
                     }
                 }
             }
@@ -55,7 +55,6 @@
             overflow-x: hidden;
         }
 
-        /* Subtle Noise Overlay - Adjusted for light theme */
         .noise {
             position: fixed;
             top: 0;
@@ -64,7 +63,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 50;
-            opacity: 0.05;
+            opacity: 0.03;
             background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
 
@@ -79,13 +78,13 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             transition: all 0.4s ease;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
         }
         
         .premium-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
-            border-color: rgba(204, 153, 102, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            border-color: rgba(204, 153, 102, 0.15);
         }
 
         .btn-solid {
@@ -95,7 +94,7 @@
         }
         .btn-solid:hover {
             background-color: #B38659;
-            box-shadow: 0 8px 25px rgba(204, 153, 102, 0.2);
+            box-shadow: 0 8px 25px rgba(204, 153, 102, 0.15);
             transform: translateY(-2px);
         }
 
@@ -108,12 +107,12 @@
         .btn-outline:hover {
             border-color: #CC9966;
             color: #CC9966;
-            background: rgba(204, 153, 102, 0.05);
+            background: rgba(204, 153, 102, 0.03);
             transform: translateY(-2px);
         }
 
         .stat-card {
-            border-left: 1px solid rgba(204, 153, 102, 0.3);
+            border-left: 1px solid rgba(204, 153, 102, 0.2);
             padding-left: 1.5rem;
         }
 
@@ -134,8 +133,8 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            background-image: radial-gradient(circle at 80% 20%, rgba(204, 153, 102, 0.03) 0%, transparent 40%),
-                              radial-gradient(circle at 20% 80%, rgba(102, 163, 204, 0.02) 0%, transparent 40%);
+            background-image: radial-gradient(circle at 80% 20%, rgba(204, 153, 102, 0.02) 0%, transparent 40%),
+                              radial-gradient(circle at 20% 80%, rgba(102, 163, 204, 0.01) 0%, transparent 40%);
         }
     </style>
 </head>
@@ -144,7 +143,7 @@
     <div class="ambient-glow"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-md border-b border-black/5">
+    <nav class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-[12px] border-b border-black/5">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
             <a href="#" class="text-xl font-bold tracking-tight text-text-main">codebrisk.</a>
             
@@ -188,10 +187,12 @@
             </div>
             <div class="hidden lg:block relative">
                 <div class="absolute -top-10 -left-10 w-64 h-64 bg-accent-primary opacity-5 blur-[100px] rounded-full"></div>
-                <div class="premium-card p-12 relative z-10 aspect-square flex items-center justify-center border-dashed border-black/10">
+                <!-- Hero Placeholder with glass edge refinement -->
+                <div class="premium-card p-12 relative z-10 aspect-square flex items-center justify-center border-accent-secondary/5 border-opacity-5">
                     <div class="text-center">
-                        <!-- Heritage visual: architecture icon -->
-                        <svg class="w-16 h-16 text-accent-primary mx-auto mb-6 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20h20M4 20V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15M9 20V11a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9"/></svg>
+                        <svg class="w-16 h-16 text-accent-primary mx-auto mb-6 opacity-30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                            <path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 21v-7a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v7"/>
+                        </svg>
                         <p class="text-sm tracking-[.3em] uppercase text-accent-secondary font-bold">Crafting Excellence</p>
                     </div>
                 </div>
@@ -203,9 +204,10 @@
     <section id="about" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-black/5">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="order-2 lg:order-1 premium-card aspect-video relative overflow-hidden group border-none">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200" alt="Workplace" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-1000">
-                <div class="absolute inset-0 bg-white/10 flex items-center justify-center backdrop-blur-[2px]">
-                     <span class="text-accent-primary font-bold text-lg tracking-widest uppercase bg-white/80 px-6 py-2 rounded-full shadow-soft">Solution Oriented</span>
+                <!-- High-key light-filled workspace visual -->
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200" alt="Light filled workspace" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-all duration-1000">
+                <div class="absolute inset-0 bg-white/5 flex items-center justify-center backdrop-blur-[1px]">
+                     <span class="text-accent-primary font-bold text-lg tracking-widest uppercase bg-white/90 px-6 py-2 rounded-full shadow-soft border border-black/5">Systemic Clarity</span>
                 </div>
             </div>
             <div class="order-1 lg:order-2">
@@ -216,11 +218,11 @@
                     At codebrisk, we architect outcomes. We move beyond features into high-level systems engineering. Every deployment is a study in balance—between performance, UX, and long-term modularity.
                 </p>
                 <div class="grid grid-cols-2 gap-6">
-                    <div class="p-4 rounded-xl bg-background-start border border-black/5 shadow-soft">
+                    <div class="p-5 rounded-xl bg-white border border-black/5 shadow-soft">
                         <p class="text-2xl font-bold text-accent-primary mb-1">100%</p>
                         <p class="text-[10px] text-text-muted uppercase tracking-widest font-bold">Custom Engineering</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-background-start border border-black/5 shadow-soft">
+                    <div class="p-5 rounded-xl bg-white border border-black/5 shadow-soft">
                         <p class="text-2xl font-bold text-accent-secondary mb-1">24/7</p>
                         <p class="text-[10px] text-text-muted uppercase tracking-widest font-bold">Concierge Support</p>
                     </div>
@@ -266,32 +268,32 @@
                 </div>
             </div>
 
-            <!-- Agentic AI Card -->
+            <!-- Agentic AI Card - Refined Content -->
             <div class="premium-card p-12 border-accent-secondary/10 group">
                 <div class="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center mb-8 text-accent-secondary group-hover:-rotate-6 transition-transform">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-text-main mb-6">Agentic AI Systems</h3>
+                <h3 class="text-3xl font-bold text-text-main mb-6">Agentic AI & Automation</h3>
                 <p class="text-text-muted leading-relaxed font-light mb-8">
-                    Beyond simple LLM integration, we build autonomous AI Agents capable of reasoning, using tools, and collaborating on complex goal-oriented tasks.
+                    Leveraging **n8n, LangChain, and LangGraph**, we build autonomous AI Agents capable of reasoning, tool-usage, and multi-step complex workflow orchestration.
                 </p>
                 <ul class="space-y-4 mb-10">
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Multi-Agent Orchestration (LangGraph / CrewAI)
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Multi-Agent Orchestration with LangGraph
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Tool-Using Agents & Function Calling Systems
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Tool-Using Agents & Function Selection
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Advanced RAG Pipelines & Vector Intelligence
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> n8n Visual Workflow Automation Engines
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Autonomous Business Process Automation
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Advanced RAG Pipelines & Semantic Search
                     </li>
                 </ul>
                 <div class="pt-6 border-t border-black/5 flex gap-4">
-                    <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">Autonomous</span>
-                    <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">Python / AI</span>
+                    <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">LangChain</span>
+                    <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">n8n / Python</span>
                 </div>
             </div>
         </div>
@@ -347,8 +349,9 @@
         <div class="grid md:grid-cols-3 gap-8 px-4">
             <div class="premium-card overflow-hidden group">
                 <div class="aspect-video bg-gray-50 relative">
-                    <img src="https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <!-- Light-mode native visual -->
+                    <img src="https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Architecture</p>
                         <h4 class="text-lg font-bold text-text-main">Vortex Core Engine</h4>
                     </div>
@@ -356,8 +359,8 @@
             </div>
             <div class="premium-card overflow-hidden group">
                 <div class="aspect-video bg-gray-50 relative">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Agentic AI</p>
                         <h4 class="text-lg font-bold text-text-main">DeepDoc Intelligence</h4>
                     </div>
@@ -365,8 +368,8 @@
             </div>
             <div class="premium-card overflow-hidden group">
                 <div class="aspect-video bg-gray-50 relative">
-                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Cloud SaaS</p>
                         <h4 class="text-lg font-bold text-text-main">NexGen Enterprise</h4>
                     </div>
@@ -385,7 +388,7 @@
             "The team at codebrisk delivered a complex AI-driven CRM system in record time. Their architectural rigor and attention to detail was beyond our expectations. A truly premium partner."
         </p>
         <div class="flex items-center justify-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-gray-100 border border-black/5"></div>
+            <div class="w-12 h-12 rounded-full bg-white border border-black/5 shadow-soft"></div>
             <div class="text-left">
                 <p class="font-bold text-text-main leading-none">Alistair Graham</p>
                 <div class="flex items-center gap-1 mt-1">
@@ -396,7 +399,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 border-y border-black/5 bg-white/50">
+    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 border-y border-black/5 bg-white/30">
         <div class="stat-card">
             <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">1200+</p>
             <p class="text-[10px] tracking-widest uppercase text-text-muted font-bold">Deployments Verified</p>
@@ -415,29 +418,30 @@
         </div>
     </section>
 
-    <!-- Blog Section -->
+    <!-- Journal & Insights Section - Refined Imagery -->
     <section id="blog" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto">
         <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-16 px-4">Journal & Insights.</h2>
         <div class="grid md:grid-cols-3 gap-8 px-4">
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-white">
+                    <!-- Light IDE theme vibe image -->
+                    <img src="https://images.unsplash.com/photo-1550439062-609e154f2723?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">22 Jan</div>
                 </div>
                 <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">Maximizing Agent Performance with LangGraph</h4>
                 <p class="text-sm text-text-muted leading-relaxed font-light">How to implement cyclic graphs for more resilient AI workflows in production environment...</p>
             </div>
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-white">
+                    <img src="https://images.unsplash.com/photo-1522071823914-7216f437c757?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">18 Feb</div>
                 </div>
                 <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">Clean Code Practices in Laravel 11</h4>
                 <p class="text-sm text-text-muted leading-relaxed font-light">A deep dive into the new simplified directory structure and best practices for modular architecture...</p>
             </div>
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
-                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-white">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">03 Mar</div>
                 </div>
                 <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">The Future of Multi-Agent Systems</h4>
@@ -446,12 +450,12 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer - Refined Legibility -->
     <footer id="contact" class="pt-24 pb-12 px-6 md:px-12 border-t border-black/5 relative bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
                 <div class="md:col-span-1">
-                    <a href="#" class="text-2xl font-bold text-text-main block mb-6">codebrisk.</a>
+                    <a href="#" class="text-2xl font-bold text-text-main block mb-6 px-1">codebrisk.</a>
                     <p class="text-sm text-text-muted font-light leading-relaxed mb-6">
                         Architectural software engineering and autonomous AI systems for forward-thinking enterprises.
                     </p>
@@ -462,7 +466,7 @@
                         </a>
                         <a href="#" class="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all text-text-muted shadow-soft">
                              <span class="sr-only">GitHub</span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.003-.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.003-.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-60.86 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                         </a>
                     </div>
                 </div>
@@ -487,7 +491,7 @@
                 <div>
                     <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Presence</h5>
                     <ul class="space-y-4 text-sm text-text-muted font-light px-1">
-                        <li>hello@codebrisk.com</li>
+                        <li><a href="mailto:hello@codebrisk.com" class="hover:text-text-main transition-colors">hello@codebrisk.com</a></li>
                         <li>+92 (300) 123 4567</li>
                         <li>Lahore, Pakistan</li>
                     </ul>
