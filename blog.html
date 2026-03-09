@@ -15,31 +15,31 @@
                 extend: {
                     colors: {
                         background: {
-                            start: '#05070a',
-                            end: '#0b1117'
+                            start: '#F7F7F7',
+                            end: '#F0F0F0'
                         },
                         accent: {
-                            primary: '#00d8ff',
-                            secondary: '#f4c76a'
+                            primary: '#CC9966',    // Heritage Gold
+                            secondary: '#9F7E59'   // Muted Bronze
                         },
                         text: {
-                            main: '#f5f7ff',
-                            muted: '#9297a5'
+                            main: '#1C1C1C',       // Carbon Black
+                            muted: '#666666'       // Mid-Grey
                         },
                         surface: {
-                            light: 'rgba(255, 255, 255, 0.03)',
-                            hover: 'rgba(255, 255, 255, 0.06)'
+                            light: '#FFFFFF',
+                            hover: '#FAFAFA'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'ambient-glow': 'radial-gradient(circle at top right, rgba(0, 216, 255, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(244, 199, 106, 0.03), transparent 30%)',
+                        'ambient-glow': 'radial-gradient(circle at top right, rgba(204, 153, 102, 0.05), transparent 40%), radial-gradient(circle at bottom left, rgba(102, 163, 204, 0.03), transparent 30%)',
                     },
                     boxShadow: {
-                        'glow': '0 0 20px rgba(0, 216, 255, 0.2)',
-                        'glow-hover': '0 0 30px rgba(0, 216, 255, 0.4)',
+                        'soft': '0 10px 40px rgba(0, 0, 0, 0.03)',
+                        'soft-hover': '0 20px 50px rgba(0, 0, 0, 0.06)',
                     }
                 }
             }
@@ -47,67 +47,90 @@
     </script>
     <style>
         body {
-            background: linear-gradient(135deg, #05070a 0%, #0b1117 100%);
-            color: #f5f7ff;
+            background-color: #F7F7F7;
+            color: #1C1C1C;
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
 
         h1, h2, h3, h4 {
             letter-spacing: -0.04em;
             line-height: 1.1;
+            color: #1C1C1C;
         }
         
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .premium-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
         }
         
-        .glass-panel:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
+        .premium-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            border-color: rgba(204, 153, 102, 0.15);
         }
 
         .btn-solid {
-            background-color: #f4c76a;
-            color: #05070a;
+            background-color: #CC9966;
+            color: #FFFFFF;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(244, 199, 106, 0.2);
         }
         .btn-solid:hover {
-            background-color: #f5d18a;
-            box-shadow: 0 8px 25px rgba(244, 199, 106, 0.4);
+            background-color: #B38659;
+            box-shadow: 0 8px 25px rgba(204, 153, 102, 0.15);
             transform: translateY(-2px);
         }
 
         .btn-outline {
             background: transparent;
-            color: #f5f7ff;
-            border: 1px solid rgba(245, 247, 255, 0.2);
+            color: #1C1C1C;
+            border: 1px solid #1C1C1C;
             transition: all 0.3s ease;
         }
         .btn-outline:hover {
-            border-color: #00d8ff;
-            color: #00d8ff;
-            background: rgba(0, 216, 255, 0.05);
+            border-color: #CC9966;
+            color: #CC9966;
+            background: rgba(204, 153, 102, 0.03);
             transform: translateY(-2px);
         }
 
+        .ambient-glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: radial-gradient(circle at 80% 20%, rgba(204, 153, 102, 0.02) 0%, transparent 40%),
+                              radial-gradient(circle at 20% 80%, rgba(102, 163, 204, 0.01) 0%, transparent 40%);
+        }
+
         input::placeholder {
-            color: rgba(146, 151, 165, 0.5);
+            color: #9297a5;
+            opacity: 0.5;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-accent-primary selection:text-black">
+<body class="antialiased selection:bg-accent-primary selection:text-white">
+    <div class="noise"></div>
+    <div class="ambient-glow"></div>
+
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-40 bg-background-start/80 backdrop-blur-md border-b border-white/5">
+    <nav class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-[12px] border-b border-black/5">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
             <a href="index.html" class="text-xl font-bold tracking-tight text-text-main">codebrisk.</a>
             
@@ -130,7 +153,7 @@
     <!-- Blog Hero Section -->
     <header class="pt-32 pb-16 md:pt-48 md:pb-24 px-6 md:px-12 max-w-7xl mx-auto">
         <div class="w-full text-left max-w-4xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-primary/10 text-accent-primary text-xs font-semibold tracking-wide uppercase mb-8 border border-accent-primary/20">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-primary/5 text-accent-primary text-xs font-semibold tracking-wide uppercase mb-8 border border-accent-primary/10">
                 The CodeBrisk Log
             </div>
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-text-main mb-6 leading-none">
@@ -146,7 +169,7 @@
     <section class="py-12 md:py-16 px-6 md:px-12 max-w-7xl mx-auto">
         <div class="grid md:grid-cols-3 gap-8">
             <!-- Article 1: Agentic AI -->
-            <div class="glass-panel p-8 group flex flex-col h-full border-accent-primary/10">
+            <div class="premium-card p-8 group flex flex-col h-full border-accent-primary/10">
                 <div class="aspect-video rounded-xl overflow-hidden mb-8 relative bg-white/5 border border-white/5">
                     <img src="images/blog/agentic-ai.png" alt="Agentic AI" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0">
                     <div class="absolute top-4 left-4 bg-accent-primary/20 backdrop-blur-md border border-accent-primary/30 text-accent-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Agentic AI</div>
@@ -162,7 +185,7 @@
             </div>
 
             <!-- Article 2: Web3 -->
-            <div class="glass-panel p-8 group flex flex-col h-full border-accent-secondary/10">
+            <div class="premium-card p-8 group flex flex-col h-full border-accent-secondary/10">
                 <div class="aspect-video rounded-xl overflow-hidden mb-8 relative bg-white/5 border border-white/5">
                     <img src="images/blog/web3-arch.png" alt="Web3 Architecture" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0">
                     <div class="absolute top-4 left-4 bg-accent-secondary/20 backdrop-blur-md border border-accent-secondary/30 text-accent-secondary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Web3 Frontier</div>
@@ -178,7 +201,7 @@
             </div>
 
             <!-- Article 3: Efficiency -->
-            <div class="glass-panel p-8 group flex flex-col h-full border-white/10">
+            <div class="premium-card p-8 group flex flex-col h-full border-white/10">
                 <div class="aspect-video rounded-xl overflow-hidden mb-8 relative bg-white/5 border border-white/5">
                     <img src="images/blog/vibe-coding.png" alt="Vibe Coding" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0">
                     <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md border border-white/20 text-text-main text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Engineering & Vibe</div>
@@ -196,7 +219,7 @@
     </section>
 
     <!-- Categories / Pillars Section -->
-    <section class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+    <section class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-black/5">
         <div class="mb-16">
             <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-6">Core Pillars.</h2>
             <p class="text-text-muted text-lg font-light max-w-2xl">The three technical domains where we dominate and deliver.</p>
@@ -217,7 +240,7 @@
                 </p>
             </div>
             <!-- Pillar 3 -->
-            <div class="border-l border-white/30 pl-8">
+            <div class="border-l border-black/10 pl-8">
                 <h4 class="text-[10px] tracking-[.4em] uppercase text-text-main font-bold mb-4">Engineering & Vibe</h4>
                 <p class="text-text-muted leading-relaxed font-light text-sm mb-6">
                     Mastering the stack with <span class="text-text-main">Next.js</span> and <span class="text-text-main">Laravel</span>. We focus on modern performance metrics and intuitive developer-centric full-stack execution.
@@ -228,13 +251,13 @@
 
     <!-- Newsletter CTA Section -->
     <section class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="glass-panel p-12 md:p-20 relative overflow-hidden text-center">
-            <div class="absolute inset-0 bg-ambient-glow opacity-50"></div>
+        <div class="premium-card p-12 md:p-20 relative overflow-hidden text-center shadow-soft">
+            <div class="absolute inset-0 bg-ambient-glow opacity-30"></div>
             <div class="relative z-10 max-w-2xl mx-auto">
                 <h2 class="text-4xl md:text-6xl font-bold text-text-main mb-6">Get the Vibe.</h2>
                 <p class="text-lg text-text-muted font-light mb-12">Join 500+ founders getting weekly insights on AI automation and Web3 scaling.</p>
                 <form class="flex flex-col sm:flex-row gap-4">
-                    <input type="email" placeholder="Enter your email" class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 text-text-main focus:outline-none focus:border-accent-primary transition-colors text-sm">
+                    <input type="email" placeholder="Enter your email" class="flex-grow bg-white border border-black/10 rounded-full px-8 py-4 text-text-main focus:outline-none focus:border-accent-primary transition-colors text-sm shadow-sm">
                     <button type="submit" class="btn-solid px-10 py-4 rounded-full font-bold text-sm whitespace-nowrap">Subscribe</button>
                 </form>
             </div>
@@ -242,7 +265,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="pt-24 pb-12 px-6 md:px-12 border-t border-white/5 relative bg-background-start/40">
+    <footer class="pt-24 pb-12 px-6 md:px-12 border-t border-black/5 relative bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
                 <div class="md:col-span-1">
