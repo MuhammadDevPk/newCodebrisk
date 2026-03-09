@@ -15,31 +15,31 @@
                 extend: {
                     colors: {
                         background: {
-                            start: '#05070a',
-                            end: '#0b1117'
+                            start: '#F7F7F7',
+                            end: '#F0F0F0'
                         },
                         accent: {
-                            primary: '#00d8ff',
-                            secondary: '#f4c76a'
+                            primary: '#CC9966',
+                            secondary: '#9F7E59'
                         },
                         text: {
-                            main: '#f5f7ff',
-                            muted: '#9297a5'
+                            main: '#1C1C1C',
+                            muted: '#666666'
                         },
                         surface: {
-                            light: 'rgba(255, 255, 255, 0.03)',
-                            hover: 'rgba(255, 255, 255, 0.06)'
+                            light: '#FFFFFF',
+                            hover: '#FAFAFA'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'ambient-glow': 'radial-gradient(circle at top right, rgba(0, 216, 255, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(244, 199, 106, 0.03), transparent 30%)',
+                        'ambient-glow': 'radial-gradient(circle at top right, rgba(204, 153, 102, 0.05), transparent 40%), radial-gradient(circle at bottom left, rgba(102, 163, 204, 0.03), transparent 30%)',
                     },
                     boxShadow: {
-                        'glow': '0 0 20px rgba(0, 216, 255, 0.2)',
-                        'glow-hover': '0 0 30px rgba(0, 216, 255, 0.4)',
+                        'soft': '0 15px 30px rgba(0, 0, 0, 0.05)',
+                        'soft-hover': '0 25px 50px rgba(0, 0, 0, 0.08)',
                     }
                 }
             }
@@ -47,61 +47,73 @@
     </script>
     <style>
         body {
-            background: linear-gradient(135deg, #05070a 0%, #0b1117 100%);
-            color: #f5f7ff;
+            background-color: #F7F7F7;
+            color: #1C1C1C;
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle Noise Overlay - Adjusted for light theme */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.05;
+            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
 
         h1, h2, h3, h4 {
             letter-spacing: -0.04em;
             line-height: 1.1;
+            color: #1C1C1C;
         }
         
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .premium-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             transition: all 0.4s ease;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
         }
         
-        .glass-panel:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
+        .premium-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+            border-color: rgba(204, 153, 102, 0.2);
         }
 
         .btn-solid {
-            background-color: #f4c76a;
-            color: #05070a;
+            background-color: #CC9966;
+            color: #FFFFFF;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(244, 199, 106, 0.2);
         }
         .btn-solid:hover {
-            background-color: #f5d18a;
-            box-shadow: 0 8px 25px rgba(244, 199, 106, 0.4);
+            background-color: #B38659;
+            box-shadow: 0 8px 25px rgba(204, 153, 102, 0.2);
             transform: translateY(-2px);
         }
 
         .btn-outline {
             background: transparent;
-            color: #f5f7ff;
-            border: 1px solid rgba(245, 247, 255, 0.2);
+            color: #1C1C1C;
+            border: 1px solid #1C1C1C;
             transition: all 0.3s ease;
         }
         .btn-outline:hover {
-            border-color: #00d8ff;
-            color: #00d8ff;
-            background: rgba(0, 216, 255, 0.05);
+            border-color: #CC9966;
+            color: #CC9966;
+            background: rgba(204, 153, 102, 0.05);
             transform: translateY(-2px);
         }
 
         .stat-card {
-            border-left: 1px solid rgba(244, 199, 106, 0.3);
+            border-left: 1px solid rgba(204, 153, 102, 0.3);
             padding-left: 1.5rem;
         }
 
@@ -112,27 +124,38 @@
                 position: absolute;
                 top: 24px; left: 40px; right: -1rem;
                 height: 1px;
-                background: linear-gradient(90deg, #f4c76a 0%, transparent 100%);
-                opacity: 0.3;
+                background: linear-gradient(90deg, #CC9966 0%, transparent 100%);
+                opacity: 0.2;
             }
             .timeline-step:last-child .timeline-line { display: none; }
         }
+
+        .ambient-glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: radial-gradient(circle at 80% 20%, rgba(204, 153, 102, 0.03) 0%, transparent 40%),
+                              radial-gradient(circle at 20% 80%, rgba(102, 163, 204, 0.02) 0%, transparent 40%);
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-accent-primary selection:text-black">
+<body class="antialiased selection:bg-accent-primary selection:text-white">
+    <div class="noise"></div>
+    <div class="ambient-glow"></div>
+
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-40 bg-background-start/80 backdrop-blur-md border-b border-white/5">
+    <nav class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-md border-b border-black/5">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
             <a href="#" class="text-xl font-bold tracking-tight text-text-main">codebrisk.</a>
             
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted">
                 <a href="#about" class="hover:text-text-main transition-colors nav-link">About</a>
-                <a href="services.html" class="hover:text-text-main transition-colors nav-link">Services</a>
-                <a href="process.html" class="hover:text-text-main transition-colors nav-link">Process</a>
-                <a href="work.html" class="hover:text-text-main transition-colors nav-link">Portfolio</a>
-                <a href="blog.html" class="hover:text-text-main transition-colors nav-link">Blog</a>
-                <a href="contact.html" class="hover:text-text-main transition-colors nav-link">Contact</a>
-                <a href="#contact" class="px-5 py-2 rounded-full border border-accent-secondary/30 text-accent-secondary hover:bg-accent-secondary/10 transition-all">Get Started</a>
+                <a href="#services" class="hover:text-text-main transition-colors nav-link">Services</a>
+                <a href="#process" class="hover:text-text-main transition-colors nav-link">Process</a>
+                <a href="#work" class="hover:text-text-main transition-colors nav-link">Portfolio</a>
+                <a href="#blog" class="hover:text-text-main transition-colors nav-link">Blog</a>
+                <a href="#contact" class="hover:text-text-main transition-colors nav-link">Contact</a>
+                <a href="#contact" class="px-5 py-2 rounded-full border border-accent-primary text-accent-primary font-bold hover:bg-accent-primary hover:text-white transition-all">Get Started</a>
             </div>
             
             <button class="md:hidden text-text-muted hover:text-text-main transition-colors">
@@ -145,30 +168,31 @@
     <header class="pt-32 pb-24 md:pt-48 md:pb-32 px-6 md:px-12 max-w-7xl mx-auto min-h-[90vh] flex items-center">
         <div class="w-full text-center md:text-left grid lg:grid-cols-2 gap-12 items-center">
             <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-secondary/10 text-accent-secondary text-xs font-semibold tracking-wide uppercase mb-8 border border-accent-secondary/20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-primary/10 text-accent-primary text-xs font-semibold tracking-wide uppercase mb-8 border border-accent-primary/20">
                     Hand Crafted Software
                 </div>
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-text-main mb-6 leading-none">
                     Delivered.
                 </h1>
                 <p class="text-lg md:text-xl text-text-muted max-w-lg mb-12 leading-relaxed font-light mx-auto md:ml-0">
-                    We engineer premium experiences for the web and autonomous intelligence systems. Exceptional code, custom-built for forward-thinking teams.
+                    We engineer premium experiences for the web and autonomous intelligence systems. Architectural precision, custom-built for forward-thinking teams.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                     <a href="#contact" class="btn-solid px-10 py-4 rounded-full font-bold text-sm">
                         Get Started
                     </a>
-                    <a href="work.html" class="btn-outline px-10 py-4 rounded-full font-bold text-sm">
+                    <a href="#work" class="btn-outline px-10 py-4 rounded-full font-bold text-sm">
                         View Portfolio
                     </a>
                 </div>
             </div>
             <div class="hidden lg:block relative">
-                <div class="absolute -top-20 -left-20 w-64 h-64 bg-accent-primary opacity-10 blur-[100px] rounded-full"></div>
-                <div class="glass-panel p-8 relative z-10 aspect-square flex items-center justify-center border-dashed border-white/10">
+                <div class="absolute -top-10 -left-10 w-64 h-64 bg-accent-primary opacity-5 blur-[100px] rounded-full"></div>
+                <div class="premium-card p-12 relative z-10 aspect-square flex items-center justify-center border-dashed border-black/10">
                     <div class="text-center">
-                        <svg class="w-16 h-16 text-accent-secondary mx-auto mb-6 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        <p class="text-sm tracking-[.3em] uppercase text-text-muted">Crafting Excellence</p>
+                        <!-- Heritage visual: architecture icon -->
+                        <svg class="w-16 h-16 text-accent-primary mx-auto mb-6 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20h20M4 20V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15M9 20V11a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9"/></svg>
+                        <p class="text-sm tracking-[.3em] uppercase text-accent-secondary font-bold">Crafting Excellence</p>
                     </div>
                 </div>
             </div>
@@ -176,30 +200,29 @@
     </header>
 
     <!-- About Section -->
-    <section id="about" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+    <section id="about" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-black/5">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="order-2 lg:order-1 glass-panel aspect-video relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200" alt="Workplace" class="w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-1000">
-                <div class="absolute inset-0 flex items-center justify-center">
-                     <span class="text-accent-secondary font-display text-lg tracking-widest uppercase">Solution Oriented</span>
+            <div class="order-2 lg:order-1 premium-card aspect-video relative overflow-hidden group border-none">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200" alt="Workplace" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-1000">
+                <div class="absolute inset-0 bg-white/10 flex items-center justify-center backdrop-blur-[2px]">
+                     <span class="text-accent-primary font-bold text-lg tracking-widest uppercase bg-white/80 px-6 py-2 rounded-full shadow-soft">Solution Oriented</span>
                 </div>
             </div>
             <div class="order-1 lg:order-2">
                 <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-8 leading-tight">
-                    Fully dedicated to finding the best solutions.
+                    Dedicated to finding the architectural best.
                 </h2>
                 <p class="text-text-muted text-lg leading-relaxed font-light mb-8">
-                    At codebrisk, we don't just build features—we architect systems. Every line of code is written with scalability, security, and world-class user experience in mind. We are a specialized team committed to high-performance outcomes.
+                    At codebrisk, we architect outcomes. We move beyond features into high-level systems engineering. Every deployment is a study in balance—between performance, UX, and long-term modularity.
                 </p>
                 <div class="grid grid-cols-2 gap-6">
-                    <div class="p-4 rounded-xl bg-white/5 border border-white/5">
+                    <div class="p-4 rounded-xl bg-background-start border border-black/5 shadow-soft">
                         <p class="text-2xl font-bold text-accent-primary mb-1">100%</p>
-                        <p class="text-xs text-text-muted uppercase tracking-widest">Custom Builds</p>
+                        <p class="text-[10px] text-text-muted uppercase tracking-widest font-bold">Custom Engineering</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-white/5 border border-white/5">
+                    <div class="p-4 rounded-xl bg-background-start border border-black/5 shadow-soft">
                         <p class="text-2xl font-bold text-accent-secondary mb-1">24/7</p>
-                        <p class="text-xs text-text-muted uppercase tracking-widest">Support Core</p>
+                        <p class="text-[10px] text-text-muted uppercase tracking-widest font-bold">Concierge Support</p>
                     </div>
                 </div>
             </div>
@@ -210,41 +233,41 @@
     <section id="services" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto">
         <div class="text-center mb-16 md:mb-24 px-4">
             <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-6">Our Capabilities.</h2>
-            <p class="text-text-muted text-lg font-light max-w-2xl mx-auto">From award-winning UI/UX to autonomous AI systems, we provide full-spectrum engineering for the modern age.</p>
+            <p class="text-text-muted text-lg font-light max-w-2xl mx-auto">From high-fidelity UI/UX to autonomous AI systems, we provide concierge-level engineering for enterprises.</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
             <!-- Web Development Card -->
-            <div class="glass-panel p-10 border-accent-primary/20 group">
+            <div class="premium-card p-12 group">
                 <div class="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center mb-8 text-accent-primary group-hover:rotate-6 transition-transform">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-text-main mb-6">Advanced Web Development</h3>
+                <h3 class="text-3xl font-bold text-text-main mb-6">Web Architecture</h3>
                 <p class="text-text-muted leading-relaxed font-light mb-8">
-                    We build mission-critical web applications that scale effortlessly. Our deep expertise in the JavaScript ecosystem and modern PHP frameworks ensures peak performance and maintainability.
+                    We build mission-critical web applications that scale effortlessly. Our deep expertise in the modern web ecosystem ensures peak performance and maintainability.
                 </p>
                 <ul class="space-y-4 mb-10">
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> React, Next.js, & Vue (Single Page Applications)
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> React, Next.js, & Vue (Modular Architecture)
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> Enterprise Laravel & PHP Engineering
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> Enterprise Laravel & Core PHP Engineering
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> High-Performance Node.js & Django Backends
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> High-Performance Backends & API Frameworks
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> Cloud-Native Architecture & Microservices
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span> Cloud Integration & Continuous Delivery
                     </li>
                 </ul>
-                <div class="pt-6 border-t border-white/5 flex gap-4">
+                <div class="pt-6 border-t border-black/5 flex gap-4">
                     <span class="text-[10px] font-bold tracking-[.2em] text-accent-primary uppercase">Modern UI</span>
                     <span class="text-[10px] font-bold tracking-[.2em] text-accent-primary uppercase">Clean Code</span>
                 </div>
             </div>
 
             <!-- Agentic AI Card -->
-            <div class="glass-panel p-10 border-accent-secondary/20 group">
+            <div class="premium-card p-12 border-accent-secondary/10 group">
                 <div class="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center mb-8 text-accent-secondary group-hover:-rotate-6 transition-transform">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
@@ -260,13 +283,13 @@
                         <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Tool-Using Agents & Function Calling Systems
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Advanced RAG Pipelines (Vector DB Integration)
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Advanced RAG Pipelines & Vector Intelligence
                     </li>
                     <li class="flex items-center gap-3 text-sm text-text-main">
-                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Autonomous Business Automation Workflows
+                        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary"></span> Autonomous Business Process Automation
                     </li>
                 </ul>
-                <div class="pt-6 border-t border-white/5 flex gap-4">
+                <div class="pt-6 border-t border-black/5 flex gap-4">
                     <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">Autonomous</span>
                     <span class="text-[10px] font-bold tracking-[.2em] text-accent-secondary uppercase">Python / AI</span>
                 </div>
@@ -275,83 +298,77 @@
     </section>
 
     <!-- Methodology / Timeline Section -->
-    <section id="process" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+    <section id="process" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-black/5">
         <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-16 px-4">The Methodology.</h2>
         <div class="timeline-container px-4">
             <div class="timeline-step group">
-                <div class="timeline-badge w-10 h-10 rounded-full bg-accent-secondary/20 border border-accent-secondary/30 flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-black transition-all">01</div>
+                <div class="timeline-badge w-10 h-10 rounded-full bg-white border border-accent-secondary flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-white transition-all shadow-soft">01</div>
                 <div class="timeline-line"></div>
                 <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Analysis</h4>
-                <p class="text-sm text-text-muted font-light leading-relaxed">Defining project scope, requirements, and architecting the path to production.</p>
+                <p class="text-sm text-text-muted font-light leading-relaxed">Defining abstract project scope and architecting the path to production.</p>
             </div>
             <div class="timeline-step group">
-                <div class="timeline-badge w-10 h-10 rounded-full bg-accent-secondary/20 border border-accent-secondary/30 flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-black transition-all">02</div>
+                <div class="timeline-badge w-10 h-10 rounded-full bg-white border border-accent-secondary flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-white transition-all shadow-soft">02</div>
                 <div class="timeline-line"></div>
                 <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Planning</h4>
-                <p class="text-sm text-text-muted font-light leading-relaxed">Mapping sprints, establishing milestones, and setting up the infrastructure stack.</p>
+                <p class="text-sm text-text-muted font-light leading-relaxed">Mapping precise sprints and establishing infrastructure benchmarks.</p>
             </div>
             <div class="timeline-step group">
-                <div class="timeline-badge w-10 h-10 rounded-full bg-accent-secondary/20 border border-accent-secondary/30 flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-black transition-all">03</div>
+                <div class="timeline-badge w-10 h-10 rounded-full bg-white border border-accent-secondary flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-white transition-all shadow-soft">03</div>
                 <div class="timeline-line"></div>
                 <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Design</h4>
-                <p class="text-sm text-text-muted font-light leading-relaxed">Crafting high-fidelity UI/UX that prioritizes utility and stunning aesthetics.</p>
+                <p class="text-sm text-text-muted font-light leading-relaxed">Crafting high-fidelity UI/UX that prioritizes architectural utility.</p>
             </div>
             <div class="timeline-step group">
-                <div class="timeline-badge w-10 h-10 rounded-full bg-accent-secondary/20 border border-accent-secondary/30 flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-black transition-all">04</div>
+                <div class="timeline-badge w-10 h-10 rounded-full bg-white border border-accent-secondary flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-white transition-all shadow-soft">04</div>
                 <div class="timeline-line"></div>
-                <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Implementation</h4>
-                <p class="text-sm text-text-muted font-light leading-relaxed">Engineering the core technical solution with continuous integration and deployment.</p>
+                <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Engineering</h4>
+                <p class="text-sm text-text-muted font-light leading-relaxed">Developing core solutions with continuous integration and CI/CD rigor.</p>
             </div>
             <div class="timeline-step group">
-                <div class="timeline-badge w-10 h-10 rounded-full bg-accent-secondary/20 border border-accent-secondary/30 flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-black transition-all">05</div>
+                <div class="timeline-badge w-10 h-10 rounded-full bg-white border border-accent-secondary flex items-center justify-center text-accent-secondary font-bold z-10 relative group-hover:bg-accent-secondary group-hover:text-white transition-all shadow-soft">05</div>
                 <div class="timeline-line"></div>
-                <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Testing</h4>
-                <p class="text-sm text-text-muted font-light leading-relaxed">Rigorous QA, security auditing, and performance optimization before final launch.</p>
+                <h4 class="text-xl font-bold text-text-main mb-3 mt-6">Validation</h4>
+                <p class="text-sm text-text-muted font-light leading-relaxed">Rigorous QA, security auditing, and performance optimization benchmarking.</p>
             </div>
         </div>
     </section>
 
     <!-- Portfolio Section -->
-    <section id="work" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+    <section id="work" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-black/5">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 px-4 gap-6">
             <div>
-                <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-4">Our Portfolio.</h2>
-                <p class="text-text-muted font-light">Recent selection of premium project deployments.</p>
+                <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-4">Selected Works.</h2>
+                <p class="text-text-muted font-light">Recent selection of high-performance project deployments.</p>
             </div>
-            <a href="work.html" class="text-accent-secondary text-sm font-bold tracking-widest uppercase border-b border-accent-secondary/30 pb-1">View All Works</a>
+            <a href="#" class="text-accent-primary text-sm font-bold tracking-widest uppercase border-b border-accent-primary/30 pb-1">View All Works</a>
         </div>
         
         <div class="grid md:grid-cols-3 gap-8 px-4">
-            <div class="glass-panel overflow-hidden group">
-                <div class="aspect-video bg-white/5 relative">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-bottom p-6">
-                        <div class="mt-auto">
-                            <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-2">FinTech Evolution</p>
-                            <h4 class="text-xl font-bold text-white">Vortex Bank UI</h4>
-                        </div>
+            <div class="premium-card overflow-hidden group">
+                <div class="aspect-video bg-gray-50 relative">
+                    <img src="https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                        <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Architecture</p>
+                        <h4 class="text-lg font-bold text-text-main">Vortex Core Engine</h4>
                     </div>
                 </div>
             </div>
-            <div class="glass-panel overflow-hidden group">
-                <div class="aspect-video bg-white/5 relative">
-                    <img src="https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-bottom p-6">
-                        <div class="mt-auto">
-                            <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-2">Agentic AI</p>
-                            <h4 class="text-xl font-bold text-white">DeepDoc AI Agent</h4>
-                        </div>
+            <div class="premium-card overflow-hidden group">
+                <div class="aspect-video bg-gray-50 relative">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                        <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Agentic AI</p>
+                        <h4 class="text-lg font-bold text-text-main">DeepDoc Intelligence</h4>
                     </div>
                 </div>
             </div>
-            <div class="glass-panel overflow-hidden group">
-                <div class="aspect-video bg-white/5 relative">
-                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-bottom p-6">
-                        <div class="mt-auto">
-                            <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-2">Platform Engine</p>
-                            <h4 class="text-xl font-bold text-white">NexGen SaaS Core</h4>
-                        </div>
+            <div class="premium-card overflow-hidden group">
+                <div class="aspect-video bg-gray-50 relative">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md p-6 border-t border-black/5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                        <p class="text-[10px] tracking-[.3em] font-bold text-accent-primary uppercase mb-1">Cloud SaaS</p>
+                        <h4 class="text-lg font-bold text-text-main">NexGen Enterprise</h4>
                     </div>
                 </div>
             </div>
@@ -360,139 +377,129 @@
 
     <!-- Testimonials -->
     <section class="py-24 md:py-32 px-6 md:px-12 max-w-5xl mx-auto text-center">
-        <div class="w-16 h-16 rounded-full bg-accent-secondary/10 flex items-center justify-center mx-auto mb-10 text-accent-secondary">
+        <div class="w-16 h-16 rounded-full bg-accent-primary/10 flex items-center justify-center mx-auto mb-10 text-accent-primary shadow-soft">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L14.017 2H11.017V6C11.017 7.10457 10.1216 8 9.017 8H6.017C5.46472 8 5.017 8.44772 5.017 9V15C5.017 15.5523 5.46472 16 6.017 16H9.017C10.1216 16 11.017 16.8954 11.017 18V21H14.017Z"/></svg>
         </div>
-        <h2 class="text-3xl font-bold text-text-main mb-6">Happy Customers</h2>
-        <p class="text-2xl md:text-3xl text-text-main font-light italic leading-relaxed mb-8">
-            "The team at codebrisk delivered a complex AI-driven CRM system in record time. Their attention to detail in the UI was beyond our expectations. A truly premium partner."
+        <h2 class="text-3xl font-bold text-text-main mb-6">Concierge Feedback</h2>
+        <p class="text-2xl md:text-3xl text-text-main font-light italic leading-relaxed mb-10">
+            "The team at codebrisk delivered a complex AI-driven CRM system in record time. Their architectural rigor and attention to detail was beyond our expectations. A truly premium partner."
         </p>
         <div class="flex items-center justify-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-white/10"></div>
+            <div class="w-12 h-12 rounded-full bg-gray-100 border border-black/5"></div>
             <div class="text-left">
-                <p class="font-bold text-text-main leading-none">John Smith</p>
+                <p class="font-bold text-text-main leading-none">Alistair Graham</p>
                 <div class="flex items-center gap-1 mt-1">
-                    <span class="text-accent-secondary">★★★★★</span>
+                    <span class="text-accent-primary text-xs">★★★★★</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 border-y border-white/5">
+    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 border-y border-black/5 bg-white/50">
         <div class="stat-card">
             <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">1200+</p>
-            <p class="text-xs tracking-widest uppercase text-text-muted">Projects Completed</p>
+            <p class="text-[10px] tracking-widest uppercase text-text-muted font-bold">Deployments Verified</p>
         </div>
         <div class="stat-card">
             <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">700+</p>
-            <p class="text-xs tracking-widest uppercase text-text-muted">Happy Customers</p>
+            <p class="text-[10px] tracking-widest uppercase text-text-muted font-bold">Partner Satisfied</p>
         </div>
         <div class="stat-card">
-            <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">1100+</p>
-            <p class="text-xs tracking-widest uppercase text-text-muted">Cups of Coffee</p>
+            <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">11k+</p>
+            <p class="text-[10px] tracking-widest uppercase text-text-muted font-bold">Architected Hours</p>
         </div>
         <div class="stat-card">
             <p class="text-4xl md:text-5xl font-bold text-text-main mb-2">30+</p>
-            <p class="text-xs tracking-widest uppercase text-text-muted">Team Members</p>
+            <p class="text-[10px] tracking-widest uppercase text-text-muted font-bold">Specialized Engineers</p>
         </div>
     </section>
 
     <!-- Blog Section -->
     <section id="blog" class="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-16 px-4 gap-6">
-            <div>
-                <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-4">From Our Blog.</h2>
-                <p class="text-text-muted font-light">Insights into modern engineering & AI trends.</p>
-            </div>
-        </div>
-
+        <h2 class="text-3xl md:text-5xl font-bold text-text-main mb-16 px-4">Journal & Insights.</h2>
         <div class="grid md:grid-cols-3 gap-8 px-4">
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 glass-panel border-none relative">
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute top-4 right-4 bg-accent-secondary text-black text-[10px] font-bold px-2 py-1 rounded">22 Jan</div>
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">22 Jan</div>
                 </div>
-                <h4 class="text-xl font-bold text-text-main mb-2 group-hover:text-accent-primary transition-colors">Maximizing Agent Performance with LangGraph</h4>
+                <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">Maximizing Agent Performance with LangGraph</h4>
                 <p class="text-sm text-text-muted leading-relaxed font-light">How to implement cyclic graphs for more resilient AI workflows in production environment...</p>
             </div>
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 glass-panel border-none relative">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute top-4 right-4 bg-accent-secondary text-black text-[10px] font-bold px-2 py-1 rounded">18 Feb</div>
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
+                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">18 Feb</div>
                 </div>
-                <h4 class="text-xl font-bold text-text-main mb-2 group-hover:text-accent-primary transition-colors">Clean Code Practices in Laravel 11</h4>
+                <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">Clean Code Practices in Laravel 11</h4>
                 <p class="text-sm text-text-muted leading-relaxed font-light">A deep dive into the new simplified directory structure and best practices for modular architecture...</p>
             </div>
             <div class="group cursor-pointer">
-                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 glass-panel border-none relative">
-                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute top-4 right-4 bg-accent-secondary text-black text-[10px] font-bold px-2 py-1 rounded">03 Mar</div>
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 premium-card border-none relative bg-gray-50">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-accent-primary text-[10px] font-bold px-3 py-1 rounded-full shadow-soft border border-black/5">03 Mar</div>
                 </div>
-                <h4 class="text-xl font-bold text-text-main mb-2 group-hover:text-accent-primary transition-colors">The Future of Multi-Agent Systems</h4>
+                <h4 class="text-xl font-bold text-text-main mb-3 group-hover:text-accent-primary transition-colors">The Future of Multi-Agent Systems</h4>
                 <p class="text-sm text-text-muted leading-relaxed font-light">Why collective intelligence in AI agents is the next frontier for autonomous business systems...</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="pt-24 pb-12 px-6 md:px-12 border-t border-white/5 relative bg-background-start/40">
+    <footer id="contact" class="pt-24 pb-12 px-6 md:px-12 border-t border-black/5 relative bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
                 <div class="md:col-span-1">
-                    <a href="#" class="text-2xl font-bold text-text-main block mb-6 px-1">codebrisk.</a>
+                    <a href="#" class="text-2xl font-bold text-text-main block mb-6">codebrisk.</a>
                     <p class="text-sm text-text-muted font-light leading-relaxed mb-6">
-                        Custom software engineering and autonomous AI agents for forward-thinking enterprises.
+                        Architectural software engineering and autonomous AI systems for forward-thinking enterprises.
                     </p>
                     <div class="flex justify-center md:justify-start gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-accent-primary group transition-all">
-                            <svg class="w-4 h-4 text-text-muted group-hover:text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        <a href="#" class="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-accent-primary hover:text-white transition-all text-text-muted shadow-soft">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-accent-primary group transition-all">
-                            <svg class="w-4 h-4 text-text-muted group-hover:text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-accent-primary group transition-all">
-                            <svg class="w-4 h-4 text-text-muted group-hover:text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        <a href="#" class="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all text-text-muted shadow-soft">
+                             <span class="sr-only">GitHub</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.003-.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                         </a>
                     </div>
                 </div>
                 <div>
-                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Company</h5>
+                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Studio</h5>
                     <ul class="space-y-4 text-sm text-text-muted font-light px-1">
-                        <li><a href="#" class="hover:text-accent-primary transition-colors">About Us</a></li>
-                        <li><a href="#" class="hover:text-accent-primary transition-colors">Our Team</a></li>
-                        <li><a href="work.html" class="hover:text-accent-primary transition-colors">Portfolio</a></li>
-                        <li><a href="#" class="hover:text-accent-primary transition-colors">Case Studies</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Our Approach</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Specialists</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Portfolio</a></li>
                         <li><a href="#" class="hover:text-accent-primary transition-colors">Contact</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Services</h5>
+                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Capabilities</h5>
                     <ul class="space-y-4 text-sm text-text-muted font-light px-1">
-                        <li><a href="services.html" class="hover:text-text-main transition-colors">Web Development</a></li>
-                        <li><a href="services.html" class="hover:text-text-main transition-colors">AI & Agents</a></li>
-                        <li><a href="#" class="hover:text-accent-primary transition-colors">UI/UX Design</a></li>
-                        <li><a href="services.html" class="hover:text-text-main transition-colors">Mobile Apps</a></li>
-                        <li><a href="#" class="hover:text-accent-primary transition-colors">Cloud Solutions</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Web Architecture</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Autonomous Systems</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Product Design</a></li>
+                        <li><a href="#" class="hover:text-accent-primary transition-colors">Cloud Strategy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Contact</h5>
+                    <h5 class="font-bold text-text-main mb-6 uppercase tracking-widest text-xs px-1">Presence</h5>
                     <ul class="space-y-4 text-sm text-text-muted font-light px-1">
-                        <li><a href="mailto:hello@codebrisk.com" class="hover:text-accent-primary transition-colors">hello@codebrisk.com</a></li>
+                        <li>hello@codebrisk.com</li>
                         <li>+92 (300) 123 4567</li>
                         <li>Lahore, Pakistan</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="pt-8 border-t border-white/5 text-center">
-                <p class="text-[10px] text-text-muted uppercase tracking-[.3em]">&copy; 2026 codebrisk. All rights reserved.</p>
+            <div class="pt-8 border-t border-black/5 text-center">
+                <p class="text-[10px] text-text-muted uppercase tracking-[.3em] font-bold">&copy; 2026 codebrisk. Architectural Concierge.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Minimal Vanilla JS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -502,9 +509,9 @@
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute('id');
                         navLinks.forEach(link => {
-                            link.classList.remove('text-text-main');
+                            link.classList.remove('text-accent-primary');
                             if (link.getAttribute('href') === `#${id}`) {
-                                link.classList.add('text-text-main');
+                                link.classList.add('text-accent-primary');
                             }
                         });
                     }

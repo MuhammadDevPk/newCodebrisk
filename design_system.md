@@ -1,47 +1,41 @@
-# codebrisk Studio Design System
+# codebrisk Studio Design System (Light Mode)
 
 ## Aesthetic Direction
 
-- **Vibe**: Dark, cinematic, minimal and deeply confident. "Silicon Valley Agency" appeal.
-- **Core Philosophy**: Generous negative space, large bold typography strictly left-aligned, pill-shaped buttons, and micro-glassmorphism. No flat colors—everything uses soft gradients and subtle overlays.
+- **Vibe**: Sleek, Architectural, Concierge White.
+- **Core Philosophy**: Pristine surfaces, high-contrast typography, and depth created through soft shadows rather than glows. Maintain the same rigorous spacing and weight from the dark mode version.
 
-## Color System
+## Color System (Light Theme)
 
-The palette abandons harsh primaries for rich, dark cinematic tones punctuated by high-energy technical accents.
+The palette shifts from "Matrix Noir" to a high-end, gallery-like aesthetic.
 
-| Role                 | Name          | Value     | Usage                                                                   |
-| :------------------- | :------------ | :-------- | :---------------------------------------------------------------------- |
-| **Background Start** | Deep Night    | `#05070a` | Top gradient color for body/surface.                                    |
-| **Background End**   | Deep Charcoal | `#0b1117` | Bottom gradient color for depth.                                        |
-| **Primary Accent**   | Neon Cyan     | `#00d8ff` | Links, primary glowing elements, CTAs, highlights.                      |
-| **Secondary Accent** | Soft Amber    | `#f4c76a` | Minimal, rare usage for secondary technical badges.                     |
-| **Text Main**        | Off-White     | `#f5f7ff` | Headings, primary copy. Ensures legibility without harsh #FFF contrast. |
-| **Text Muted**       | Slate Gray    | `#9297a5` | Paragraphs, meta text, inactive icons.                                  |
+| Role                  | Name           | Value     | Usage                                                  |
+| :-------------------- | :------------- | :-------- | :----------------------------------------------------- |
+| **Background Canvas** | Off-White      | `#F7F7F7` | Primary page background.                               |
+| **Surface secondary** | Pristine White | `#FFFFFF` | Card backgrounds, panel surfaces.                      |
+| **Primary Accent**    | Heritage Gold  | `#CC9966` | CTAs, borders, high-contrast highlights.               |
+| **Secondary Accent**  | Muted Bronze   | `#9F7E59` | Subtle technical labels (e.g., "Crafting Excellence"). |
+| **Text Main**         | Carbon Black   | `#1C1C1C` | Headings and primary copy.                             |
+| **Text Muted**        | Mid-Grey       | `#666666` | Supporting text, paragraphs, and footer meta.          |
 
 ## Typography
 
 - **Font Family**: `Inter` (sans-serif)
-- **Characteristics**: Clean grotesk styling, tightly tracked headings across the board.
 - **Scale**:
-  - `Hero Headline`: 5xl to 7xl+ (`text-[5rem]`), tight tracking (`-0.04em`), `font-weight: 500`.
-  - `Section Titles`: 3xl to 4xl, tight tracking, `font-weight: 600`.
-  - `Body Copy`: `text-lg` to `text-xl`, relaxed leading, `font-weight: 300` (light) for a sophisticated editorial feel.
+  - `Hero Headline`: 5xl to 8xl, Carbon Black (`#1C1C1C`), `-0.04em` tracking.
+  - `Body Copy`: `text-lg` to `xl`, Mid-Grey (`#666666`), `font-weight: 300`.
 
-## Layout & Components
+## Layout & Components (Modified)
 
 - **Cards / Panels**:
-  - `class="glass-panel"`
-  - Background `rgba(255, 255, 255, 0.02)`
-  - Border `1px solid rgba(255, 255, 255, 0.05)`
-  - High blur factor (`backdrop-filter: blur(16px)`)
-- **Radii**:
-  - Panels: `20px` (modern soft rounding)
-  - Buttons: `full` (pill shape)
-- **Micro-Interactions**:
-  - `.subtle-glow`: Triggers a faint #00d8ff outline transition on card hover.
-  - Button Hover: Outlined pills inherit a subtle background tint (`rgba(0, 216, 255, 0.05)`) and border color change. Solid buttons gain a mild cyan drop shadow.
+  - Background: `#FFFFFF`
+  - Border: `1px solid rgba(0, 0, 0, 0.05)`
+  - Shadow: `0 15px 30px rgba(0, 0, 0, 0.05)` (Replaces glows)
+- **Buttons**:
+  - **Primary**: Solid Gold (`#CC9966`) background, White text.
+  - **Secondary**: Carbon Black border and text.
 
-## Motion Guidelines
+## Motion & Depth
 
-- **Noise Overlay**: Fixed position SVG fractal noise (`opacity: 0.15`), providing texture.
-- **Parallax Gradient**: A fixed background div containing ambient radial glows (`radial-gradient`), bound to `window.scrollY * 0.15` via vanilla JS, producing a smooth ambient depth shift when scrolling.
+- **Shadows**: Soft, multi-layered shadows to provide a sense of "floating" elevation on the off-white canvas.
+- **Parallax**: Retained for background radial blends, but using very soft, low-opacity warm wash colors (light gold/blue).
