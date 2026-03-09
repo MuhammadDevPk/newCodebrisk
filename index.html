@@ -155,34 +155,71 @@
         /* ====== VIBE BOT ====== */
         #vibe-bot {
             position: fixed;
-            bottom: 40px;
-            right: 40px;
+            bottom: 30px;
+            left: 0;
             z-index: 35;
             pointer-events: none;
             perspective: 600px;
-            width: 100px;
-            height: 140px;
-            transition: opacity 0.5s ease;
+            width: 80px;
+            height: 110px;
+            transition: transform 0.15s linear;
+            will-change: transform;
         }
         @media (max-width: 768px) {
-            #vibe-bot { width: 60px; height: 84px; bottom: 20px; right: 20px; }
+            #vibe-bot { width: 50px; height: 70px; bottom: 15px; }
         }
 
         .bot-scene {
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            animation: bot-float 3s ease-in-out infinite;
         }
 
-        /* Idle Float */
-        @keyframes bot-float {
-            0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-            50% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+        /* ---- Idle Float ---- */
+        .is-idle .bot-scene {
+            animation: bot-idle-float 3s ease-in-out infinite;
+        }
+        @keyframes bot-idle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
 
-        /* Head (pod) */
+        /* ---- Walking Cycle ---- */
+        .is-walking .bot-scene {
+            animation: bot-walk-bob 0.4s ease-in-out infinite;
+        }
+        @keyframes bot-walk-bob {
+            0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+            25% { transform: translateY(-4px) rotateZ(-2deg); }
+            75% { transform: translateY(-4px) rotateZ(2deg); }
+        }
+
+        .is-walking .bot-leg:nth-child(1) {
+            animation: bot-walk-leg-l 0.4s ease-in-out infinite;
+        }
+        .is-walking .bot-leg:nth-child(2) {
+            animation: bot-walk-leg-r 0.4s ease-in-out infinite;
+        }
+        @keyframes bot-walk-leg-l {
+            0%, 100% { transform: rotateX(0deg); }
+            25% { transform: rotateX(-30deg); }
+            75% { transform: rotateX(30deg); }
+        }
+        @keyframes bot-walk-leg-r {
+            0%, 100% { transform: rotateX(0deg); }
+            25% { transform: rotateX(30deg); }
+            75% { transform: rotateX(-30deg); }
+        }
+
+        .is-walking .bot-antenna {
+            animation: bot-walk-antenna 0.3s ease-in-out infinite alternate;
+        }
+        @keyframes bot-walk-antenna {
+            0% { transform: translateX(-50%) rotate(-12deg); }
+            100% { transform: translateX(-50%) rotate(12deg); }
+        }
+
+        /* ---- Head (pod) ---- */
         .bot-head {
             width: 70%;
             height: 45%;
@@ -193,7 +230,6 @@
             background: linear-gradient(160deg, #FFFFFF 0%, #F0F0F0 100%);
             box-shadow: 0 8px 30px rgba(0,0,0,0.06), inset 0 -2px 6px rgba(0,0,0,0.03);
             border: 1px solid rgba(0,0,0,0.04);
-            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         /* Eye */
@@ -280,7 +316,6 @@
             background: linear-gradient(180deg, #9F7E59, #CCCCCC);
             border-radius: 2px;
             transform-origin: top center;
-            transition: transform 0.3s ease;
         }
         .bot-foot {
             width: 10px;
@@ -290,59 +325,9 @@
             margin-left: -3.5px;
         }
 
-        /* === Bot Behavior States === */
-
-        /* Run state — tilt forward, legs pumping */
-        .bot-state-run .bot-scene {
-            animation: bot-run-tilt 0.6s ease-in-out infinite alternate;
-        }
-        @keyframes bot-run-tilt {
-            0% { transform: translateY(-3px) rotateX(12deg) rotateZ(-2deg); }
-            100% { transform: translateY(-7px) rotateX(15deg) rotateZ(2deg); }
-        }
-        .bot-state-run .bot-leg:nth-child(1) {
-            animation: bot-leg-run-l 0.35s ease-in-out infinite alternate;
-        }
-        .bot-state-run .bot-leg:nth-child(2) {
-            animation: bot-leg-run-r 0.35s ease-in-out infinite alternate;
-        }
-        @keyframes bot-leg-run-l {
-            0% { transform: rotateX(-25deg); }
-            100% { transform: rotateX(25deg); }
-        }
-        @keyframes bot-leg-run-r {
-            0% { transform: rotateX(25deg); }
-            100% { transform: rotateX(-25deg); }
-        }
-        .bot-state-run .bot-antenna {
-            animation: bot-antenna-wobble 0.3s ease-in-out infinite alternate;
-        }
-        @keyframes bot-antenna-wobble {
-            0% { transform: translateX(-50%) rotate(-15deg); }
-            100% { transform: translateX(-50%) rotate(15deg); }
-        }
-
-        /* Wave/Spin state */
-        .bot-state-wave .bot-scene {
-            animation: bot-spin 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-        }
-        @keyframes bot-spin {
-            0% { transform: translateY(0) rotateY(0deg); }
-            40% { transform: translateY(-15px) rotateY(360deg); }
-            60% { transform: translateY(-15px) rotateY(360deg); }
-            100% { transform: translateY(0) rotateY(360deg); }
-        }
-        .bot-state-wave .bot-antenna {
-            animation: bot-wave-antenna 0.5s ease-in-out infinite alternate;
-        }
-        @keyframes bot-wave-antenna {
-            0% { transform: translateX(-50%) rotate(-30deg); }
-            100% { transform: translateX(-50%) rotate(30deg); }
-        }
-
-        /* Look state — controlled by JS inline transform */
-        .bot-state-look .bot-scene {
-            animation: none; /* override float */
+        /* Direction flip */
+        .bot-face-left .bot-scene {
+            transform: scaleX(-1);
         }
     </style>
 </head>
@@ -351,7 +336,7 @@
     <div class="ambient-glow"></div>
 
     <!-- Vibe Bot -->
-    <div id="vibe-bot" class="bot-state-look">
+    <div id="vibe-bot">
         <div class="bot-scene">
             <div class="bot-head">
                 <div class="bot-antenna"></div>
@@ -788,81 +773,60 @@
                 }, 50);
             }
 
-            // ====== VIBE BOT LOGIC ======
+            // ====== VIBE BOT LOGIC: Scroll-Synced Walking ======
             const vibeBot = document.getElementById('vibe-bot');
-            const botScene = vibeBot ? vibeBot.querySelector('.bot-scene') : null;
-            let currentBotState = 'look';
+            if (vibeBot) {
+                let lastScrollY = window.scrollY;
+                let scrollIdleTimer = null;
+                const botWidth = 80; // match CSS width
 
-            function setBotState(state) {
-                if (!vibeBot || currentBotState === state) return;
-                vibeBot.className = `bot-state-${state}`;
-                currentBotState = state;
-                // Reset inline transform when leaving look state
-                if (state !== 'look' && botScene) {
-                    botScene.style.transform = '';
+                // Set initial idle state
+                vibeBot.classList.add('is-idle');
+
+                function getScrollPercent() {
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    if (docHeight <= 0) return 0;
+                    return Math.min(Math.max(window.scrollY / docHeight, 0), 1);
                 }
-            }
 
-            // Section-based behavior via IntersectionObserver
-            const botSections = {
-                'about': 'look',       // hero area is above about, treat scroll-past-hero as 'look'
-                'services': 'run',
-                'process': 'run',
-                'work': 'look',
-                'blog': 'look',
-                'contact': 'wave'
-            };
+                function updateBot() {
+                    const scrollPercent = getScrollPercent();
+                    const currentScrollY = window.scrollY;
+                    const delta = currentScrollY - lastScrollY;
+                    const maxX = window.innerWidth - botWidth;
 
-            const botObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        const state = botSections[id] || 'look';
-                        setBotState(state);
+                    // Map scroll % to horizontal position
+                    const posX = scrollPercent * maxX;
+                    vibeBot.style.transform = `translateX(${posX}px)`;
+
+                    // Direction: scrolling down = face right, scrolling up = face left
+                    if (delta > 0) {
+                        vibeBot.classList.remove('bot-face-left');
+                    } else if (delta < 0) {
+                        vibeBot.classList.add('bot-face-left');
                     }
-                });
-            }, { root: null, rootMargin: '0px', threshold: 0.3 });
 
-            Object.keys(botSections).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) botObserver.observe(el);
-            });
+                    // Toggle walking / idle
+                    if (Math.abs(delta) > 0) {
+                        vibeBot.classList.remove('is-idle');
+                        vibeBot.classList.add('is-walking');
 
-            // Also observe the header for "look" state
-            const heroHeader = document.querySelector('header');
-            if (heroHeader) {
-                const heroObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) setBotState('look');
-                    });
-                }, { root: null, rootMargin: '0px', threshold: 0.3 });
-                heroObserver.observe(heroHeader);
-            }
-
-            // Mouse tracking for "look" state
-            if (botScene) {
-                document.addEventListener('mousemove', (e) => {
-                    if (currentBotState !== 'look') return;
-                    const rect = vibeBot.getBoundingClientRect();
-                    const botCenterX = rect.left + rect.width / 2;
-                    const botCenterY = rect.top + rect.height / 2;
-                    const deltaX = (e.clientX - botCenterX) / window.innerWidth;
-                    const deltaY = (e.clientY - botCenterY) / window.innerHeight;
-                    const rotY = deltaX * 30;   // max 30deg
-                    const rotX = -deltaY * 15;  // max 15deg
-                    const floatY = Math.sin(Date.now() / 500) * 5; // subtle float
-                    botScene.style.transform = `translateY(${floatY}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-                });
-
-                // Keep a subtle float going in look state even without mouse movement
-                (function lookFloat() {
-                    if (currentBotState === 'look' && !document.hidden) {
-                        const floatY = Math.sin(Date.now() / 500) * 5;
-                        // Only apply if no recent mouse movement override
-                        // This is a gentle fallback; mousemove above overrides it
+                        // Reset idle timer
+                        clearTimeout(scrollIdleTimer);
+                        scrollIdleTimer = setTimeout(() => {
+                            vibeBot.classList.remove('is-walking');
+                            vibeBot.classList.add('is-idle');
+                        }, 150);
                     }
-                    requestAnimationFrame(lookFloat);
-                })();
+
+                    lastScrollY = currentScrollY;
+                }
+
+                // Use passive scroll listener for performance
+                window.addEventListener('scroll', updateBot, { passive: true });
+
+                // Initial position
+                updateBot();
             }
         });
     </script>
