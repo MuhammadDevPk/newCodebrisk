@@ -874,12 +874,9 @@
                 }
 
                 function startJump() {
-                    if (isJumping || jumpCooldown) return;
                     isJumping = true;
-                    jumpCooldown = true;
                     jumpProgress = 0;
                     jumpScrollAccum = 0;
-                    scrollEventCount = 0;
 
                     vibeBot.classList.remove('is-walking', 'is-idle');
                     vibeBot.classList.add('is-jumping');
@@ -887,15 +884,11 @@
                 }
 
                 function endJump() {
-                    isJumping = false;
+                    // Immediately chain into next jump
                     jumpProgress = 0;
                     jumpScrollAccum = 0;
-                    vibeBot.classList.remove('is-jumping');
                     clearJumpInlineStyles();
-                    vibeBot.classList.add('is-walking');
-
-                    const cooldown = JUMP_COOLDOWN_MIN + Math.random() * (JUMP_COOLDOWN_MAX - JUMP_COOLDOWN_MIN);
-                    setTimeout(() => { jumpCooldown = false; }, cooldown);
+                    applyJumpFrame(0);
                 }
 
                 function updateBot() {
@@ -914,36 +907,27 @@
                     else if (delta < 0) vibeBot.classList.add('bot-face-left');
 
                     if (absDelta > 0) {
-                        // ---- During a jump: advance progress by scroll distance ----
-                        if (isJumping) {
-                            jumpScrollAccum += absDelta;
-                            jumpProgress = Math.min(jumpScrollAccum / JUMP_SCROLL_DIST, 1);
-                            applyJumpFrame(jumpProgress);
+                        // Start jumping if not already
+                        if (!isJumping) {
+                            startJump();
+                        }
 
-                            if (jumpProgress >= 1) {
-                                endJump();
-                            }
-                        } else {
-                            // Normal walking
-                            vibeBot.classList.remove('is-idle');
-                            vibeBot.classList.add('is-walking');
+                        // Advance jump progress by scroll distance
+                        jumpScrollAccum += absDelta;
+                        jumpProgress = Math.min(jumpScrollAccum / JUMP_SCROLL_DIST, 1);
+                        applyJumpFrame(jumpProgress);
 
-                            scrollEventCount++;
-                            // Random jump chance
-                            if (scrollEventCount > JUMP_SCROLL_THRESHOLD && !jumpCooldown && Math.random() < 0.06) {
-                                startJump();
-                            }
+                        if (jumpProgress >= 1) {
+                            endJump(); // chains into next jump
                         }
 
                         clearTimeout(scrollIdleTimer);
                         scrollIdleTimer = setTimeout(() => {
-                            // Scrolling stopped — freeze everything
-                            if (!isJumping) {
-                                vibeBot.classList.remove('is-walking');
-                                vibeBot.classList.add('is-idle');
-                            }
-                            // If jumping, the bot just freezes in place (no class change needed)
-                            scrollEventCount = 0;
+                            // Scrolling stopped — go to idle
+                            isJumping = false;
+                            vibeBot.classList.remove('is-jumping', 'is-walking');
+                            clearJumpInlineStyles();
+                            vibeBot.classList.add('is-idle');
                         }, 150);
                     }
 
