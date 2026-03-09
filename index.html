@@ -165,6 +165,9 @@
             transition: transform 0.15s linear;
             will-change: transform;
         }
+        #vibe-bot.is-jumping {
+            transition: none; /* let the jump be instant */
+        }
         @media (max-width: 768px) {
             #vibe-bot { width: 50px; height: 70px; bottom: 15px; }
         }
@@ -217,6 +220,14 @@
         @keyframes bot-walk-antenna {
             0% { transform: translateX(-50%) rotate(-12deg); }
             100% { transform: translateX(-50%) rotate(12deg); }
+        }
+
+        /* ---- Jump State (transforms controlled by JS) ---- */
+        .is-jumping .bot-scene,
+        .is-jumping .bot-leg,
+        .is-jumping .bot-antenna,
+        .is-jumping .bot-eye {
+            animation: none !important;
         }
 
         /* ---- Head (pod) ---- */
@@ -773,14 +784,30 @@
                 }, 50);
             }
 
-            // ====== VIBE BOT LOGIC: Scroll-Synced Walking ======
+            // ====== VIBE BOT LOGIC: Scroll-Driven Walking + Jumps ======
             const vibeBot = document.getElementById('vibe-bot');
             if (vibeBot) {
+                const botScene = vibeBot.querySelector('.bot-scene');
+                const botLegs = vibeBot.querySelectorAll('.bot-leg');
+                const botAntenna = vibeBot.querySelector('.bot-antenna');
+                const botEye = vibeBot.querySelector('.bot-eye');
+
                 let lastScrollY = window.scrollY;
                 let scrollIdleTimer = null;
-                const botWidth = 80; // match CSS width
+                let scrollEventCount = 0;
+                const botWidth = 80;
 
-                // Set initial idle state
+                // Jump state
+                let isJumping = false;
+                let jumpCooldown = false;
+                let jumpProgress = 0;           // 0 to 1
+                let jumpScrollAccum = 0;         // pixels scrolled during this jump
+                const JUMP_HEIGHT = 130;         // px — how high the bot leaps
+                const JUMP_SCROLL_DIST = 600;    // px of scroll needed to complete a full jump
+                const JUMP_COOLDOWN_MIN = 2000;
+                const JUMP_COOLDOWN_MAX = 5000;
+                const JUMP_SCROLL_THRESHOLD = 20;
+
                 vibeBot.classList.add('is-idle');
 
                 function getScrollPercent() {
@@ -789,43 +816,141 @@
                     return Math.min(Math.max(window.scrollY / docHeight, 0), 1);
                 }
 
+                // Parabolic arc: y = -4h * t * (t - 1), peaks at t=0.5
+                function jumpArc(t) {
+                    return -4 * JUMP_HEIGHT * t * (t - 1);
+                }
+
+                // Interpolate between keyframe values
+                function lerp(a, b, t) { return a + (b - a) * t; }
+
+                function applyJumpFrame(t) {
+                    const heightY = jumpArc(t);
+                    const spin = t * 360;
+
+                    // Squash/stretch
+                    let scaleX = 1, scaleY = 1;
+                    if (t < 0.15) {
+                        // Squat phase
+                        const st = t / 0.15;
+                        scaleX = lerp(1, 1.08, st);
+                        scaleY = lerp(1, 0.88, st);
+                    } else if (t > 0.85) {
+                        // Land squash
+                        const lt = (t - 0.85) / 0.15;
+                        scaleX = lerp(1.08, 1, lt);
+                        scaleY = lerp(0.88, 1, lt);
+                    } else if (t > 0.15 && t < 0.5) {
+                        // Stretch in air
+                        scaleX = 0.92; scaleY = 1.08;
+                    }
+
+                    botScene.style.transform = `translateY(${-heightY}px) rotateZ(${spin}deg) scale(${scaleX}, ${scaleY})`;
+
+                    // Legs tuck during airborne, extend near landing
+                    let legAngle = 0;
+                    if (t > 0.15 && t < 0.75) {
+                        legAngle = 45; // tucked
+                    } else if (t >= 0.75 && t < 0.9) {
+                        legAngle = lerp(45, -10, (t - 0.75) / 0.15); // extend
+                    }
+                    botLegs.forEach(leg => { leg.style.transform = `rotateX(${legAngle}deg)`; });
+
+                    // Antenna whip
+                    const antennaAngle = Math.sin(t * Math.PI * 4) * 35;
+                    botAntenna.style.transform = `translateX(-50%) rotate(${antennaAngle}deg)`;
+
+                    // Eye glow intensity
+                    const glowIntensity = t < 0.6 ? lerp(0.5, 0.95, t / 0.6) : lerp(0.95, 0.5, (t - 0.6) / 0.4);
+                    const glowSpread = t < 0.6 ? lerp(12, 30, t / 0.6) : lerp(30, 12, (t - 0.6) / 0.4);
+                    botEye.style.boxShadow = `0 0 ${glowSpread}px rgba(204,153,102,${glowIntensity}), 0 0 ${glowSpread * 2}px rgba(204,153,102,${glowIntensity * 0.5})`;
+                }
+
+                function clearJumpInlineStyles() {
+                    botScene.style.transform = '';
+                    botLegs.forEach(leg => { leg.style.transform = ''; });
+                    botAntenna.style.transform = '';
+                    botEye.style.boxShadow = '';
+                }
+
+                function startJump() {
+                    if (isJumping || jumpCooldown) return;
+                    isJumping = true;
+                    jumpCooldown = true;
+                    jumpProgress = 0;
+                    jumpScrollAccum = 0;
+                    scrollEventCount = 0;
+
+                    vibeBot.classList.remove('is-walking', 'is-idle');
+                    vibeBot.classList.add('is-jumping');
+                    applyJumpFrame(0);
+                }
+
+                function endJump() {
+                    isJumping = false;
+                    jumpProgress = 0;
+                    jumpScrollAccum = 0;
+                    vibeBot.classList.remove('is-jumping');
+                    clearJumpInlineStyles();
+                    vibeBot.classList.add('is-walking');
+
+                    const cooldown = JUMP_COOLDOWN_MIN + Math.random() * (JUMP_COOLDOWN_MAX - JUMP_COOLDOWN_MIN);
+                    setTimeout(() => { jumpCooldown = false; }, cooldown);
+                }
+
                 function updateBot() {
                     const scrollPercent = getScrollPercent();
                     const currentScrollY = window.scrollY;
                     const delta = currentScrollY - lastScrollY;
+                    const absDelta = Math.abs(delta);
                     const maxX = window.innerWidth - botWidth;
 
-                    // Map scroll % to horizontal position
+                    // Horizontal position
                     const posX = scrollPercent * maxX;
                     vibeBot.style.transform = `translateX(${posX}px)`;
 
-                    // Direction: scrolling down = face right, scrolling up = face left
-                    if (delta > 0) {
-                        vibeBot.classList.remove('bot-face-left');
-                    } else if (delta < 0) {
-                        vibeBot.classList.add('bot-face-left');
-                    }
+                    // Direction
+                    if (delta > 0) vibeBot.classList.remove('bot-face-left');
+                    else if (delta < 0) vibeBot.classList.add('bot-face-left');
 
-                    // Toggle walking / idle
-                    if (Math.abs(delta) > 0) {
-                        vibeBot.classList.remove('is-idle');
-                        vibeBot.classList.add('is-walking');
+                    if (absDelta > 0) {
+                        // ---- During a jump: advance progress by scroll distance ----
+                        if (isJumping) {
+                            jumpScrollAccum += absDelta;
+                            jumpProgress = Math.min(jumpScrollAccum / JUMP_SCROLL_DIST, 1);
+                            applyJumpFrame(jumpProgress);
 
-                        // Reset idle timer
+                            if (jumpProgress >= 1) {
+                                endJump();
+                            }
+                        } else {
+                            // Normal walking
+                            vibeBot.classList.remove('is-idle');
+                            vibeBot.classList.add('is-walking');
+
+                            scrollEventCount++;
+                            // Random jump chance
+                            if (scrollEventCount > JUMP_SCROLL_THRESHOLD && !jumpCooldown && Math.random() < 0.06) {
+                                startJump();
+                            }
+                        }
+
                         clearTimeout(scrollIdleTimer);
                         scrollIdleTimer = setTimeout(() => {
-                            vibeBot.classList.remove('is-walking');
-                            vibeBot.classList.add('is-idle');
+                            // Scrolling stopped — freeze everything
+                            if (!isJumping) {
+                                vibeBot.classList.remove('is-walking');
+                                vibeBot.classList.add('is-idle');
+                            }
+                            // If jumping, the bot just freezes in place (no class change needed)
+                            scrollEventCount = 0;
                         }, 150);
                     }
 
                     lastScrollY = currentScrollY;
                 }
 
-                // Use passive scroll listener for performance
                 window.addEventListener('scroll', updateBot, { passive: true });
-
-                // Initial position
                 updateBot();
             }
         });
