@@ -136,6 +136,20 @@
             background-image: radial-gradient(circle at 80% 20%, rgba(204, 153, 102, 0.02) 0%, transparent 40%),
                               radial-gradient(circle at 20% 80%, rgba(102, 163, 204, 0.01) 0%, transparent 40%);
         }
+
+        /* Architectural Scroll Reveal */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0ms; }
+        .reveal-delay-2 { transition-delay: 150ms; }
     </style>
 </head>
 <body class="antialiased selection:bg-accent-primary selection:text-white">
@@ -240,7 +254,7 @@
 
         <div class="grid md:grid-cols-2 gap-12">
             <!-- Web Development Card -->
-            <div class="premium-card p-12 group">
+            <div class="premium-card p-12 group reveal-on-scroll reveal-delay-1">
                 <div class="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center mb-8 text-accent-primary group-hover:rotate-6 transition-transform">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
@@ -269,7 +283,7 @@
             </div>
 
             <!-- Agentic AI Card - Refined Content -->
-            <div class="premium-card p-12 border-accent-secondary/10 group">
+            <div class="premium-card p-12 border-accent-secondary/10 group reveal-on-scroll reveal-delay-2">
                 <div class="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center mb-8 text-accent-secondary group-hover:-rotate-6 transition-transform">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
@@ -506,9 +520,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Active nav link highlighting
             const navLinks = document.querySelectorAll('.nav-link');
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-            const observer = new IntersectionObserver((entries) => {
+            const navObserverOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const navObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute('id');
@@ -520,8 +535,20 @@
                         });
                     }
                 });
-            }, observerOptions);
-            document.querySelectorAll('section, header').forEach(el => { if(el.id) observer.observe(el); });
+            }, navObserverOptions);
+            document.querySelectorAll('section, header').forEach(el => { if(el.id) navObserver.observe(el); });
+
+            // Architectural Scroll Reveal
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
         });
     </script>
 </body>
