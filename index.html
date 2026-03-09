@@ -82,9 +82,10 @@
         }
         
         .premium-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             border-color: rgba(204, 153, 102, 0.15);
+            z-index: 10;
         }
 
         .btn-solid {
@@ -184,7 +185,7 @@
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-primary/10 text-accent-primary text-xs font-semibold tracking-wide uppercase mb-8 border border-accent-primary/20">
                     Hand Crafted Software
                 </div>
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-text-main mb-6 leading-none">
+                <h1 class="hero-scramble text-5xl md:text-7xl lg:text-8xl font-bold text-text-main mb-6 leading-none" data-value="Delivered.">
                     Delivered.
                 </h1>
                 <p class="text-lg md:text-xl text-text-muted max-w-lg mb-12 leading-relaxed font-light mx-auto md:ml-0">
@@ -254,8 +255,8 @@
 
         <div class="grid md:grid-cols-2 gap-12">
             <!-- Web Development Card -->
-            <div class="premium-card p-12 group reveal-on-scroll reveal-delay-1">
-                <div class="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center mb-8 text-accent-primary group-hover:rotate-6 transition-transform">
+            <div class="premium-card p-12 group reveal-on-scroll reveal-delay-1 relative transition-all duration-500">
+                <div class="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center mb-8 text-accent-primary group-hover:rotate-[15deg] group-hover:bg-accent-primary/20 group-hover:shadow-[0_0_20px_rgba(204,153,102,0.4)] transition-all duration-500">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
                 <h3 class="text-3xl font-bold text-text-main mb-6">Web Architecture</h3>
@@ -283,8 +284,8 @@
             </div>
 
             <!-- Agentic AI Card - Refined Content -->
-            <div class="premium-card p-12 border-accent-secondary/10 group reveal-on-scroll reveal-delay-2">
-                <div class="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center mb-8 text-accent-secondary group-hover:-rotate-6 transition-transform">
+            <div class="premium-card p-12 border-accent-secondary/10 group reveal-on-scroll reveal-delay-2 relative transition-all duration-500">
+                <div class="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center mb-8 text-accent-secondary group-hover:-rotate-[15deg] group-hover:bg-accent-secondary/20 group-hover:shadow-[0_0_20px_rgba(159,126,89,0.4)] transition-all duration-500">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
                 <h3 class="text-3xl font-bold text-text-main mb-6">Agentic AI & Automation</h3>
@@ -549,6 +550,27 @@
                 });
             }, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
             revealElements.forEach(el => revealObserver.observe(el));
+
+            // Vibe Coding Text Scramble
+            const scrambleEl = document.querySelector('.hero-scramble');
+            if (scrambleEl) {
+                const finalWord = scrambleEl.dataset.value || scrambleEl.textContent.trim();
+                const chars = 'Delivered';
+                let iteration = 0;
+                
+                const scrambleInterval = setInterval(() => {
+                    scrambleEl.textContent = finalWord.split('').map((letter, index) => {
+                        if (index < iteration) return finalWord[index];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    }).join('');
+                    
+                    if (iteration >= finalWord.length) {
+                        clearInterval(scrambleInterval);
+                        scrambleEl.textContent = finalWord; // ensure exact match at end
+                    }
+                    iteration += finalWord.length / 20; // 20 frames = ~1000ms at 50ms interval
+                }, 50);
+            }
         });
     </script>
 </body>
